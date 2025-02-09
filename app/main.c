@@ -19,7 +19,12 @@ int main() {
     if(!strcmp(input, "exit 0")){
 
       exit(0);
-
+    
+    }else if (!strncmp(input, "echo",strlen("echo")))
+    {
+    
+      printf("%s\n",input + strlen("echo"));
+    
     } else {
 
       printf("%s: command not found\n", input);
