@@ -15,7 +15,7 @@ int main() {
     printf("$ ");
     fgets(input, 100, stdin);
     
-    if(strcmp(input, "exit 0")==true){
+    if(strcmp(input, "exit")==true){
 
       return 0;
 
