@@ -18,7 +18,7 @@ int main() {
     
     input[strlen(input) - 1] = '\0';
     
-    if(strcmp(input, "exit")==true){
+    if(strcmp(input, "exit 0")==true){
 
       exit(0);
 
