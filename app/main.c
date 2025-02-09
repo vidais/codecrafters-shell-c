@@ -23,7 +23,7 @@ int main() {
     }else if (!strncmp(input, "echo",strlen("echo")))
     {
     
-      printf("%s\n",input + strlen("echo"));
+      printf("%s\n",input + strlen("echo "));
     
     } else {
 
