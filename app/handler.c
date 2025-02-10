@@ -35,7 +35,7 @@ void type(char *input){
 
     for(int i=0;i<4;i++){    
         
-        if(strncmp(input,builtins[i],sizeof(builtins[i]))){
+        if(strncmp(input,builtins[i],4)){
             printf("%s is a shell builtin\n",input);
             return;
         }
