@@ -31,7 +31,7 @@ void command_handler(char *input){
 
 void type(char *input){
 
-    char builtins[][16] = {"echo","type","cat","exit"};
+    char builtins[][4] = {"echo","type","cat","exit"};
 
     for(int i=0;i<4;i++){    
         
