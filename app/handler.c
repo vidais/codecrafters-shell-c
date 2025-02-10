@@ -17,7 +17,11 @@ void command_handler(char *input){
         int code = input + strlen("exit ");
         exit(code);
 
+<<<<<<< HEAD
     } else if (strncmp(input, "echo",strlen("echo"))){
+=======
+    } else if (!strncmp(input, "echo",strlen("echo"))){
+>>>>>>> d43ccf3e1eda217dd3d2fb5fae91aff9b3b4e00f
     
       printf("%s\n",input + strlen("echo "));
       return;
@@ -34,7 +38,11 @@ void type(char *input){
 
     char builtins[][16] = {"echo","type","cat","exit"};
 
+<<<<<<< HEAD
     for(int i=0;i<sizeof(builtins);i++){    
+=======
+    for(int i=0;i<4;i++){    
+>>>>>>> d43ccf3e1eda217dd3d2fb5fae91aff9b3b4e00f
         
         if(strncmp(input,builtins[i],sizeof(builtins[i]))){
             printf("%s is a shell builtin\n",input);
