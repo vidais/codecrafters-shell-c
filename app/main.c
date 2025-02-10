@@ -3,6 +3,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+
+int is_executable(const char *path){ return access(path,X_OK)==0; }
+
+char *find_in_path(const char *command){
+  char *path_env = getenv("PATH");
+  if (path_env == NULL){
+    return NULL; 
+  }
+
+  char *path_copy = strdup(path_env);
+  char *dir = strtok(path_copy,":");
+  static char full_path[1024];
+
+  while (dir != NULL) {
+    snprintf(full_path,sizeof(full_path),"/%s/%s",dir,command);
+    if (is_executable(full_path)){
+      free(path_copy);
+      return full_path;
+    }
+    dir = strtok(NULL,":");
+  }
+
+  free(path_copy);
+  return NULL;
+}
+
 // returns a string with a \n before the \0 and should be freed
 char *read_line() {
   size_t size = 1; // getline automatically "realloc"s more space
@@ -19,39 +46,8 @@ char *read_line() {
   }
   return buffer;
 }
-// Commands
-/*
-struct Command{
-  enum CommandType cmd;
-  char* raw_command;
-  int (*validate)(char* str);
-  ssize_t (*execute)(char* str);
-};
-struct Command** init_commands(size_t* count){
-  struct Command* exitc = malloc(sizeof(struct Command));
-  exitc->cmd = _exit;
-  exitc->validate = validate_exit;
-  exitc->execute = execute_exit;
-  struct Command **commands = malloc(sizeof(struct Command*) * 8);
-  commands[0] = exitc;
-  *count = 1;
-  return commands;
-}
-ssize_t execute_exit(char* str){
-  printf("Executing exit\n");
-  return 0;
-}
-int validate_exit(char* str){
-  return strncmp("exit", str, 4) == 0;
-}
-enum CommandType{
-  _invalid, _exit,
-};
-enum CommandType validate(char* input){
-  if(validate_exit(input)) return _exit;
-  else return _invalid;
-}
-*/
+
+
 void handle_input(char *input) {
   if (strncmp("exit", input, 4) == 0) {
     char *arguments = input + 4;
@@ -71,7 +67,7 @@ void handle_input(char *input) {
   } else if (strncmp("echo", input, 4) == 0) {
     printf("%s\n", input + 5);
   } else if (strncmp("type", input, 4) == 0) {
-    char builtins[][16] = {"echo", "type", "exit", "cat"};
+    char builtins[][16] = {"ls","echo", "type", "exit", "cat"};
     char *arguments = input + 5;
     for (size_t i = 0; i < sizeof(builtins) / 16; i++) {
       if (strcmp(builtins[i], arguments) == 0) {
@@ -80,6 +76,11 @@ void handle_input(char *input) {
       }
     }
     printf("%s not found\n", arguments);
+    char *path = find_in_path(command);
+    if (path){
+      printf("%s is %s\n",command,path);
+    } else printf("%s: not found\n", command);
+
   } else {
     fprintf(stderr, "%s: command not found\n", input);
   }
